@@ -38,7 +38,7 @@ end
 if not filesystem.exists(filesystem.path(system.getCurrentScript()).."reactor.pic") then
     filelist = {'atom.pic', 'coil.pic', 'eff.pic', 'flow.pic', 'fuel.pic','heat.pic','kettle.pic','minus.pic','out.pic','plus.pic','reactor.pic','rf.pic','rod.pic','rpm.pic','ventg.pic','ventr.pic','venty.pic','xrod.pic'}
     for i, myfile in ipairs(filelist) do
-        internet.download("https://raw.githubusercontent.com/arduinka55055/MineOS_Reactor/master/Resources/"..myfile, system.getCurrentScript().."Resources/"..myfile)
+        internet.download("https://raw.githubusercontent.com/arduinka55055/MineOS_Reactor/master/Resources/"..myfile, filesystem.path(system.getCurrentScript()).."Resources/"..myfile)
     end
     
 end
