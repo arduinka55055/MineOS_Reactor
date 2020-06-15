@@ -35,20 +35,20 @@ function n2s(mynumber) -- remove .0 from numbers
     return string.format("%u", number.roundToDecimalPlaces(mynumber));
 end
 
-local workspace, window = system.addWindow(GUI.filledWindow(1, 1, 120, 40, 0xF0F0F0))
-local layout = window:addChild(GUI.layout(1, 3, window.width, window.height - 1, 1, 1))
-
 if not filesystem.exists(filesystem.path(system.getCurrentScript()).."reactor.pic") then
     filelist = {'atom.pic', 'coil.pic', 'eff.pic', 'flow.pic', 'fuel.pic','heat.pic','kettle.pic','minus.pic','out.pic','plus.pic','reactor.pic','rf.pic','rod.pic','rpm.pic','ventg.pic','ventr.pic','venty.pic','xrod.pic'}
     for i, myfile in ipairs(filelist) do
-        internet.download("https://raw.githubusercontent.com/arduinka55055/MineOS_Reactor/master/"..myfile, system.getCurrentScript()..myfile)
+        internet.download("https://raw.githubusercontent.com/arduinka55055/MineOS_Reactor/master/Resources/"..myfile, system.getCurrentScript().."Resources/"..myfile)
     end
     
 end
 
+local workspace, window = system.addWindow(GUI.filledWindow(1, 1, 120, 40, 0xF0F0F0))
+local layout = window:addChild(GUI.layout(1, 3, window.width, window.height - 1, 1, 1))
+
 ----------------------------------------------
 if require("computer").totalMemory()>2000000 then--Picture
-local imageReactor=imageL.load(filesystem.path(system.getCurrentScript()).."reactor.pic")
+local imageReactor=imageL.load(filesystem.path(system.getCurrentScript()).."Resources/reactor.pic")
 layout:addChild(GUI.image(0, 0, imageReactor))
 end
 
@@ -85,24 +85,24 @@ end
 local reactorTemperatureS = window:addChild(GUI.slider(6, 23, 40, 0xBBBB00, 0x0, 0xFFFFFF, 0xFF0000, 500, 2000, 1000, true, "Жара: ", " °C"))
 reactorTemperatureS.roundValues = true
 ---------------------------------------------- REACTOR DASHBOARD ИНФО РЕАКТОРА
-window:addChild(GUI.image(4, 26, imageL.load(filesystem.path(system.getCurrentScript()).."heat.pic")))
+window:addChild(GUI.image(4, 26, imageL.load(filesystem.path(system.getCurrentScript()).."Resources/heat.pic")))
 local reactorTemperature=window:addChild(GUI.text(9, 27, 0xAAAA00, "Temperature"))
 
-window:addChild(GUI.image(4, 28, imageL.load(filesystem.path(system.getCurrentScript()).."out.pic")))
+window:addChild(GUI.image(4, 28, imageL.load(filesystem.path(system.getCurrentScript()).."Resources/out.pic")))
 local reactorOut=window:addChild(GUI.text(9, 29, 0xAAAA00, "mB/tick"))
 
-window:addChild(GUI.image(4, 30, imageL.load(filesystem.path(system.getCurrentScript()).."fuel.pic")))
+window:addChild(GUI.image(4, 30, imageL.load(filesystem.path(system.getCurrentScript()).."Resources/fuel.pic")))
 local reactorFuel=window:addChild(GUI.text(9, 31, 0xAAAA00, "mB/tick"))
 
-window:addChild(GUI.image(4, 32, imageL.load(filesystem.path(system.getCurrentScript()).."atom.pic")))
+window:addChild(GUI.image(4, 32, imageL.load(filesystem.path(system.getCurrentScript()).."Resources/atom.pic")))
 local reactorEff=window:addChild(GUI.text(9, 33, 0xAAAA00, "%"))
 -----------------------
-window:addChild(GUI.image(27, 26, imageL.load(filesystem.path(system.getCurrentScript()).."xrod.pic")))
+window:addChild(GUI.image(27, 26, imageL.load(filesystem.path(system.getCurrentScript()).."Resources/xrod.pic")))
 
-window:addChild(GUI.image(32, 29, imageL.load(filesystem.path(system.getCurrentScript()).."rod.pic")))
+window:addChild(GUI.image(32, 29, imageL.load(filesystem.path(system.getCurrentScript()).."Resources/rod.pic")))
 local reactorRod=window:addChild(GUI.text(37, 30, 0xAAAA00, "%"))
 
-window:addChild(GUI.image(33, 26, imageL.load(filesystem.path(system.getCurrentScript()).."plus.pic"))).eventHandler = function(bullshit1, bullshit2, useful, ...)
+window:addChild(GUI.image(33, 26, imageL.load(filesystem.path(system.getCurrentScript()).."Resources/plus.pic"))).eventHandler = function(bullshit1, bullshit2, useful, ...)
     if useful == "touch" then
         if keyboard.isShiftDown() then
             if keyboard.isAltDown() then
@@ -117,7 +117,7 @@ window:addChild(GUI.image(33, 26, imageL.load(filesystem.path(system.getCurrentS
         end
     end
 end
-window:addChild(GUI.image(33, 32, imageL.load(filesystem.path(system.getCurrentScript()).."minus.pic"))).eventHandler = function(bullshit1, bullshit2, useful, ...)
+window:addChild(GUI.image(33, 32, imageL.load(filesystem.path(system.getCurrentScript()).."Resources/minus.pic"))).eventHandler = function(bullshit1, bullshit2, useful, ...)
     if useful == "touch" then
         if keyboard.isShiftDown() then
             if keyboard.isAltDown() then
@@ -178,17 +178,17 @@ end
 ---------------------------------------------- TURBINE DASHBOARD ИНФО ТУРБИНЫ
 local turbineRPMp=window:addChild(GUI.progressBar(76, 6, 38, 0x8A2BE2, 0x1D1D1D, 0x000000, 80, true, false))
 
-window:addChild(GUI.image(75, 7, imageL.load(filesystem.path(system.getCurrentScript()).."rpm.pic")))
+window:addChild(GUI.image(75, 7, imageL.load(filesystem.path(system.getCurrentScript()).."Resources/rpm.pic")))
 local turbineRPM=window:addChild(GUI.text(80, 8, 0x8A2BE2, "RPM"))
 
-window:addChild(GUI.image(75, 9, imageL.load(filesystem.path(system.getCurrentScript()).."rf.pic")))
+window:addChild(GUI.image(75, 9, imageL.load(filesystem.path(system.getCurrentScript()).."Resources/rf.pic")))
 local turbineRFT=window:addChild(GUI.text(80, 10, 0x8A2BE2, "RF/tick"))
 
-window:addChild(GUI.image(75, 11, imageL.load(filesystem.path(system.getCurrentScript()).."eff.pic")))
+window:addChild(GUI.image(75, 11, imageL.load(filesystem.path(system.getCurrentScript()).."Resources/eff.pic")))
 local turbineEff=window:addChild(GUI.text(80, 12, 0x8A2BE2, "%"))
 
 ---------------------------------------------- FLOW СТРУЙКА
-window:addChild(GUI.image(95, 7, imageL.load(filesystem.path(system.getCurrentScript()).."plus.pic"))).eventHandler = function(bullshit1, bullshit2, useful, ...)
+window:addChild(GUI.image(95, 7, imageL.load(filesystem.path(system.getCurrentScript()).."Resources/plus.pic"))).eventHandler = function(bullshit1, bullshit2, useful, ...)
     if useful == "touch" then
         if keyboard.isShiftDown() then
             if keyboard.isControlDown() then
@@ -204,10 +204,10 @@ window:addChild(GUI.image(95, 7, imageL.load(filesystem.path(system.getCurrentSc
     end
 end
 
-window:addChild(GUI.image(100, 7, imageL.load(filesystem.path(system.getCurrentScript()).."flow.pic")))
+window:addChild(GUI.image(100, 7, imageL.load(filesystem.path(system.getCurrentScript()).."Resources/flow.pic")))
 local turbineFlow=window:addChild(GUI.text(110, 8, 0x8A2BE2, "9999 mB/t"))
 
-window:addChild(GUI.image(105, 7, imageL.load(filesystem.path(system.getCurrentScript()).."minus.pic"))).eventHandler = function(bullshit1, bullshit2, useful, ...)
+window:addChild(GUI.image(105, 7, imageL.load(filesystem.path(system.getCurrentScript()).."Resources/minus.pic"))).eventHandler = function(bullshit1, bullshit2, useful, ...)
     if useful == "touch" then
         if keyboard.isShiftDown() then
             if keyboard.isControlDown() then
@@ -223,7 +223,7 @@ window:addChild(GUI.image(105, 7, imageL.load(filesystem.path(system.getCurrentS
     end
 end
 ---------------------------------------------- COIL КАТУШЕНЦИЯ
-window:addChild(GUI.image(95, 9, imageL.load(filesystem.path(system.getCurrentScript()).."coil.pic")))
+window:addChild(GUI.image(95, 9, imageL.load(filesystem.path(system.getCurrentScript()).."Resources/coil.pic")))
 local engageCoil = window:addChild(GUI.switch(100, 10, 8, 0xFFD700, 0x3D3D1D, 0xEEEEEE, turbine.getInductorEngaged()))
 engageCoil.eventHandler=function(bullshit1, bullshit2, e1, ...)--костыль дающий пинка по выключателю
     if e1 == "touch" then
@@ -246,21 +246,21 @@ end
 local tVentData=window:addChild(GUI.text(110, 13, 0xFFFF00, "Overflow"))--сам мод не имеет такой функции, чтобы получить состояние клапана. но разраб уже может добавить
 turbine.setVentOverflow() --Middle mode
 
-window:addChild(GUI.image(95, 12, imageL.load(filesystem.path(system.getCurrentScript()).."ventg.pic"))).eventHandler = function(bullshit1, bullshit2, useful, ...)
+window:addChild(GUI.image(95, 12, imageL.load(filesystem.path(system.getCurrentScript()).."Resources/ventg.pic"))).eventHandler = function(bullshit1, bullshit2, useful, ...)
     if useful == "touch" then
         turbine.setVentAll()
         tVentData.color=0x00FF00
         tVentData.text="Exhaust"
     end
 end
-window:addChild(GUI.image(100, 12, imageL.load(filesystem.path(system.getCurrentScript()).."venty.pic"))).eventHandler = function(bullshit1, bullshit2, useful, ...)
+window:addChild(GUI.image(100, 12, imageL.load(filesystem.path(system.getCurrentScript()).."Resources/venty.pic"))).eventHandler = function(bullshit1, bullshit2, useful, ...)
     if useful == "touch" then
         turbine.setVentOverflow()
         tVentData.color=0xFFFF00
         tVentData.text="Overflow"
     end
 end
-window:addChild(GUI.image(105, 12, imageL.load(filesystem.path(system.getCurrentScript()).."ventr.pic"))).eventHandler = function(bullshit1, bullshit2, useful, ...)
+window:addChild(GUI.image(105, 12, imageL.load(filesystem.path(system.getCurrentScript()).."Resources/ventr.pic"))).eventHandler = function(bullshit1, bullshit2, useful, ...)
     if useful == "touch" then
         turbine.setVentNone()
         tVentData.color=0xFF0000
@@ -269,7 +269,7 @@ window:addChild(GUI.image(105, 12, imageL.load(filesystem.path(system.getCurrent
 end
 
 -------------------------------------------------------------------------------------------- ЧАЙНИК|for dummies
-window:addChild(GUI.image(0, 3, imageL.load(filesystem.path(system.getCurrentScript()).."kettle.pic"))).eventHandler = function(bullshit1, bullshit2, useful, ...)
+window:addChild(GUI.image(0, 3, imageL.load(filesystem.path(system.getCurrentScript()).."Resources/kettle.pic"))).eventHandler = function(bullshit1, bullshit2, useful, ...)
     if useful == "touch" then
         enablePIDr.switch.setState(enablePIDr.switch,true)
         enablePIDt.switch.setState(enablePIDt.switch,true)
