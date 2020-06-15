@@ -363,6 +363,7 @@ mainhandler=event.addHandler(function()
 --Раскомментировать для построения графиков PID регулятора (больше на GitHub)
 --Розкоментувати для побудови графіків PID регулятора (більше на GitHub)
 --Uncomment this for plotting graph of PID regulation (watch GitHub)
+--will added soon
 
 end,0.5)
 
