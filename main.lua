@@ -47,7 +47,7 @@ if not filesystem.exists(filesystem.path(system.getCurrentScript()).."Resources/
     
 end
 ----------------------------------------------
-if require("computer").totalMemory()>2000000 then--Picture
+if require("computer").totalMemory()>3000000 then--Picture
 local imageReactor=imageL.load(filesystem.path(system.getCurrentScript()).."Resources/reactor.pic")
 layout:addChild(GUI.image(0, 0, imageReactor))
 end
