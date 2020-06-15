@@ -38,6 +38,14 @@ end
 local workspace, window = system.addWindow(GUI.filledWindow(1, 1, 120, 40, 0xF0F0F0))
 local layout = window:addChild(GUI.layout(1, 3, window.width, window.height - 1, 1, 1))
 
+if not filesystem.exists(filesystem.path(system.getCurrentScript()).."reactor.pic") then
+    filelist = {'atom.pic', 'coil.pic', 'eff.pic', 'flow.pic', 'fuel.pic','heat.pic','kettle.pic','minus.pic','out.pic','plus.pic','reactor.pic','rf.pic','rod.pic','rpm.pic','ventg.pic','ventr.pic','venty.pic','xrod.pic'}
+    for i, myfile in ipairs(filelist) do
+        internet.download("https://raw.githubusercontent.com/arduinka55055/MineOS_Reactor/master/"..myfile, system.getCurrentScript())..myfile)
+    end
+    
+end
+
 ----------------------------------------------
 if require("computer").totalMemory()>2000000 then--Picture
 local imageReactor=imageL.load(filesystem.path(system.getCurrentScript()).."reactor.pic")
