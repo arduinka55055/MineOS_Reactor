@@ -4,6 +4,7 @@ local system = require("System")
 local component = require("component")
 local filesystem = require("Filesystem")
 local event = require("Event")
+local screen = require("Screen")
 local number = require("Number")
 local internet = require("Internet")
 local keyboard = require("Keyboard")
@@ -41,13 +42,21 @@ local layout = window:addChild(GUI.layout(1, 3, window.width, window.height - 1,
 
 if not filesystem.exists(filesystem.path(system.getCurrentScript()).."Resources/reactor.pic") then
     filelist = {'atom.pic', 'coil.pic', 'eff.pic', 'flow.pic', 'fuel.pic','heat.pic','kettle.pic','minus.pic','out.pic','plus.pic','reactor.pic','rf.pic','rod.pic','rpm.pic','ventg.pic','ventr.pic','venty.pic','xrod.pic'}
+    local tempwindow = workspace:addChild(GUI.filledWindow(50, 25, 30, 4, 0x262626))
+    templabel=tempwindow:addChild(GUI.label(2, 4, 10, 4, 0xB4B4B4, 0xFFFFFF, 0x969696, 0xB4B4B4, "Downloading:"))
+    workspace:draw()
     for i, myfile in ipairs(filelist) do
+        templabel.text="Downloading: "..myfile
+        workspace:draw()
         internet.download("https://raw.githubusercontent.com/arduinka55055/MineOS_Reactor/master/Resources/"..myfile, filesystem.path(system.getCurrentScript()).."Resources/"..myfile)
     end
-    
+    tempwindow:remove()
+    workspace:draw()
 end
+
+
 ----------------------------------------------
-if require("computer").totalMemory()>3000000 then--Picture
+if require("computer").totalMemory()>2000000 then--Picture
 local imageReactor=imageL.load(filesystem.path(system.getCurrentScript()).."Resources/reactor.pic")
 layout:addChild(GUI.image(0, 0, imageReactor))
 end
@@ -133,6 +142,43 @@ window:addChild(GUI.image(33, 32, imageL.load(filesystem.path(system.getCurrentS
     end
 end
 
+
+
+local function drawMYCustomProgressBar(object)
+    --local activeHeight = math.floor( (100-math.min(object.value, 100)) / 100 * object.height)     
+    local activeEmpty    = math.floor( math.min(100-object.depleted-object.main,    100) / 100 * object.height+0.5) 
+    local activeMain     = math.floor( math.min(object.main,     100) / 100 * object.height+0.5)
+
+    screen.drawRectangle(object.x-1, object.y-1, object.width+2, object.height+2, 0xAAAAAA,0x0, " ")
+    screen.drawRectangle(object.x, object.y, object.width, object.height, 0x2D2D2D,0x0, " ")
+    screen.drawRectangle(object.x, object.y+activeEmpty, object.width, activeMain, 0x999900,0x0, " ")
+    screen.drawRectangle(object.x, object.y+activeEmpty+activeMain, object.width, object.height-activeEmpty-activeMain, 0x5555aa,0x0, " ")
+    local fullvalue = n2s(number.roundToDecimalPlaces(object.depleted+object.main)).."% full"
+    local burnedvalue = n2s(number.roundToDecimalPlaces(object.depleted)).."% waste"
+    screen.drawText(math.floor(object.x + object.width / 2 - unicode.len(burnedvalue) / 2), object.y+object.height - 1, 0x000000, burnedvalue)        
+    screen.drawText(math.floor(object.x + object.width / 2 - unicode.len(fullvalue) / 2), object.y,                 0x000000, fullvalue)        
+    --screen.drawText(math.floor(object.x + object.width / 2 - unicode.len(stringValue2) / 2), object.y, object.colors.value, stringValue2)
+    return object
+end
+function MyCustomProgressBar(x, y,width, height)
+    local object = GUI.object(x, y, width, height)
+    object.main=0;
+    object.depleted=0;
+    object.draw = drawMYCustomProgressBar
+    object.id=id
+    object.update=function() 
+        if component.proxy(object.id)==nil then  
+        else
+            
+        end
+    end
+    return object
+end
+local ReactorFuelMeter=window:addChild(MyCustomProgressBar(64,22,10,15 ))
+local ReactorFuelMax=window:addChild(GUI.text(76, 26, 0xAAAA00, "mB"))
+local ReactorFuelAmount=window:addChild(GUI.text(76, 28, 0xAAAA00, "mB"))
+local ReactorFuelWaste=window:addChild(GUI.text(76, 30, 0xAAAA00, "mB"))
+local ReactorFuelTotal=window:addChild(GUI.text(76, 32, 0xAAAA00, "mB"))
 
 -------------------------------------------------------------------------------------------- TURBINE ТУРБИНА!
 local enableTurbinee=window:addChild(GUI.switchAndLabel(86, 3, 18, 8, 0x00EEEE, 0x1D1D1D, 0xEEEEEE, 0xFF0000, "Start",turbine.getActive()))
@@ -309,6 +355,14 @@ mainhandler=event.addHandler(function()
     enableTurbinee.switch.setState(enableTurbinee.switch,turbine.getActive())
     engageCoil.setState(engageCoil,turbine.getInductorEngaged())
 
+    ReactorFuelMeter.main=reactor.getFuelAmount()/reactor.getFuelAmountMax()*100
+    ReactorFuelMeter.depleted=reactor.getWasteAmount()/reactor.getFuelAmountMax()*100
+
+    ReactorFuelMax.text=n2s(number.roundToDecimalPlaces(reactor.getFuelAmountMax())).."mB MAX"
+    ReactorFuelAmount.text=n2s(number.roundToDecimalPlaces(reactor.getFuelAmount())).."mB Fuel"
+    ReactorFuelWaste.text=n2s(number.roundToDecimalPlaces(reactor.getWasteAmount())).."mB Waste"
+    ReactorFuelTotal.text=n2s(number.roundToDecimalPlaces(reactor.getWasteAmount()+reactor.getFuelAmount())).."mB Total"
+
     local mainRPMValue=number.roundToDecimalPlaces(turbine.getRotorSpeed())--Меняем цвет от оборотов|Змінюємо колір від обертань|Change color by RPM
     if mainRPMValue==0 then
         turbineRPMp.colors.active=0x444444
@@ -359,11 +413,10 @@ mainhandler=event.addHandler(function()
         reactor.setAllControlRodLevels(rOutput)
     end
 
---internet.request("http://reactordata.com/"..number.roundToDecimalPlaces(reactor.getCasingTemperature()))
+--internet.request("http://localhost/"..number.roundToDecimalPlaces(reactor.getCasingTemperature()))
 --Раскомментировать для построения графиков PID регулятора (больше на GitHub)
 --Розкоментувати для побудови графіків PID регулятора (більше на GitHub)
 --Uncomment this for plotting graph of PID regulation (watch GitHub)
---will added soon
 
 end,0.5)
 
