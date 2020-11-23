@@ -160,7 +160,7 @@ local function drawMYCustomProgressBar(object)
     --screen.drawText(math.floor(object.x + object.width / 2 - unicode.len(stringValue2) / 2), object.y, object.colors.value, stringValue2)
     return object
 end
-function MyCustomProgressBar(x, y,width, height)
+local function MyCustomProgressBar(x, y,width, height)
     local object = GUI.object(x, y, width, height)
     object.main=0;
     object.depleted=0;
